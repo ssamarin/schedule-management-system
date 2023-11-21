@@ -1,0 +1,35 @@
+@font-face {
+  font-weight: 400;
+  font-family: Stolzl;
+  font-style: normal;
+  src:
+    url("../assets/fonts/stolzl_regular.woff2") format("woff2"),
+    url("../assets/fonts/stolzl_regular.woff") format("woff");
+}
+
+@font-face {
+  font-weight: 450;
+  font-family: Stolzl;
+  font-style: normal;
+  src:
+    url("../assets/fonts/stolzl_book.woff2") format("woff2"),
+    url("../assets/fonts/stolzl_book.woff") format("woff");
+}
+
+@font-face {
+  font-weight: 500;
+  font-family: Stolzl;
+  font-style: normal;
+  src:
+    url("../assets/fonts/stolzl_medium.woff2") format("woff2"),
+    url("../assets/fonts/stolzl_medium.woff") format("woff");
+}
+
+@font-face {
+  font-weight: 700;
+  font-family: Stolzl;
+  font-style: normal;
+  src:
+    url("../assets/fonts/stolzl_bold.woff2") format("woff2"),
+    url("../assets/fonts/stolzl_bold.woff") format("woff");
+}

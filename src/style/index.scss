@@ -1,7 +1,11 @@
+@import url("./_fonts.scss");
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  font-weight: 450;
+  font-family: Stolzl, serif;
 }
 
 html,
@@ -86,6 +90,7 @@ q {
 button {
   border: none;
   outline: none;
+  cursor: pointer;
 }
 
 a {
@@ -116,4 +121,6 @@ input {
 
 #root {
   height: 100vh;
+  padding: 10px 32px 24px 92px;
+  background-color: #f4f6f9;
 }
