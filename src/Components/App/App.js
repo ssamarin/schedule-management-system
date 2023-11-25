@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Header from '../Header';
 import Menu from '../Menu';
+import Filters from '../Filters';
 
 function App() {
   return (
@@ -8,7 +10,7 @@ function App() {
       <Header />
       <Menu />
       <main className="main">
-        fasd
+        <Filters />
       </main>
     </div>
   );
