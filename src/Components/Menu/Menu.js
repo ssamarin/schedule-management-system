@@ -22,6 +22,7 @@ function Menu() {
     justify-content: space-between;
     height: 100%;
     text-align: center;
+    background-color: #fff;
 
     .logo {
       margin-bottom: 24px;
