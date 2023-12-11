@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
+import table from '../Components/Table/tableSlice';
 
 const store = configureStore({
-  reducer: {},
+  reducer: { table },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: process.env.NODE_ENV !== 'production',
 });

@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { onMonthChanged, onCityChanged } from '../Table/tableSlice';
 
 import search from '../../assets/icons/filters/search.svg';
 import selectArrow from '../../assets/icons/filters/selectArrow.svg';
@@ -9,6 +11,7 @@ function Filters() {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 24px;
 
     .filters {
       display: flex;
@@ -61,6 +64,16 @@ function Filters() {
       }
     }
   `;
+  const dispatch = useDispatch();
+
+  const onSelectMonth = (value) => {
+    dispatch(onMonthChanged(value));
+  };
+
+  const onSelectCity = (value) => {
+    dispatch(onCityChanged(value));
+  };
+
   return (
     <MainHeader>
       <div className="filters">
@@ -68,11 +81,11 @@ function Filters() {
         <button type="button">Фильтры</button>
       </div>
       <div className="selects">
-        <select name="month">
+        <select onChange={(e) => onSelectMonth(e.target.value)} name="month">
           <option value="april">Апрель</option>
           <option value="march">Март</option>
         </select>
-        <select name="city">
+        <select onChange={(e) => onSelectCity(e.target.value)} name="city">
           <option value="Moscow">Москва</option>
           <option value="Spb">Санкт-Петербург</option>
         </select>
