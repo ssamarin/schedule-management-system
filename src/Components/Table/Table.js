@@ -10,6 +10,7 @@ import {
   employeesFetching,
   employeesFetched,
   employeesFetchingError,
+  employeeDeleted,
 } from './tableSlice';
 import useHttp from '../../hooks/http.hook';
 
@@ -55,6 +56,8 @@ function Table() {
     min-width: 300px;
 
     .btns {
+      z-index: 0;
+      position: relative;
       display: flex;
       column-gap: 4px;
     }
@@ -70,6 +73,46 @@ function Table() {
 
   .dayOfTheWeek {
     color: #7a7b85;
+  }
+
+  .wekend {
+    color: #F0303F;
+    background-color: #FEEAEC;
+  }
+
+  .fired {
+    color: #fff;
+    background-color: #FF4F4F;
+  }
+
+  .sick {
+    color: #2B2D35;
+    background-color: #FADA6B;
+  }
+
+  .vacation {
+    color: #FFF;
+    background-color: #219EE4;
+  }
+
+  .select {
+    position: absolute;
+    bottom: -5px;
+    left: -147px;
+    z-index: 1;
+    width: 170px;
+    height: 40px;
+    padding: 10px;
+    color: #2b2d35;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    vertical-align: middle;
+    background-color: #fff;
+  }
+
+  .hidden {
+    display: none;
   }
   `;
 
@@ -102,23 +145,61 @@ function Table() {
     getEmployeesData();
   }, [currentMoth, currentCity]);
 
+  const switchCellStyles = (value) => {
+    switch (value) {
+      case 'сб':
+        return 'wekend';
+      case 'вс':
+        return 'wekend';
+      case 'н':
+        return 'wekend';
+      case 'у':
+        return 'fired';
+      case 'б':
+        return 'sick';
+      case 'о':
+        return 'vacation';
+      default:
+        return 'information';
+    }
+  };
+
+  const hideToggle = (i) => {
+    const selects = document.querySelectorAll('.select');
+    selects[i].classList.toggle('hidden');
+  };
+
+  const deleteEmployee = useCallback((id) => {
+    request(request(`http://localhost:3001/${currentMoth + currentCity}`), 'DELETE')
+      .then((data) => console.log(data, 'Deleted'))
+      .then(dispatch(employeeDeleted(id)))
+      .catch((e) => console.error(e));
+  });
+
   return (
     <Wrapper>
       <tbody>
         <tr key={nanoid()} className="darkRow">
           <td key={nanoid()} aria-label="first" className="firstColumn" />
           {
-            daysOfTheWeek.map((item) => (<td key={nanoid()} className="dayOfTheWeek">{item}</td>))
+            daysOfTheWeek.map((item) => (
+              <td
+                key={nanoid()}
+                className={switchCellStyles(item)}
+              >
+                {item}
+              </td>
+            ))
           }
         </tr>
         <tr key={nanoid()} className="darkRow">
           <td key={nanoid()} className="firstColumn">Сотрудник</td>
           {
-            daysOfTheWeek.map((item, i) => (<td key={nanoid()} className="information">{i + 1}</td>))
+            daysOfTheWeek.map((item, i) => (<td key={nanoid()} className={item === 'сб' || item === 'вс' ? 'wekend information' : 'information'}>{i + 1}</td>))
           }
         </tr>
         {
-            employees.map((item) => (
+            employees.map((item, i) => (
               <tr key={nanoid()}>
                 <td key={nanoid()} className="firstColumn">
                   <div className="nameWrapper">
@@ -129,14 +210,20 @@ function Table() {
                       <button key={nanoid()} type="button">
                         <img src={user} alt="user" />
                       </button>
-                      <button key={nanoid()} type="button">
+                      <button className="more" onClick={() => hideToggle(i)} key={nanoid()} type="button">
                         <img src={more} alt="show more" />
                       </button>
+                      <div id={i} className="select hidden">
+                        <button onClick={() => deleteEmployee(item.id)} className="delete" type="button">
+                          Удалить из графика
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </td>
                 {
-                  item.schedule.map((elem) => (<td key={nanoid()}>{elem}</td>))
+                  item.schedule.map((elem) => (
+                    <td className={switchCellStyles(elem)} key={nanoid()}>{elem}</td>))
                 }
               </tr>
             ))
