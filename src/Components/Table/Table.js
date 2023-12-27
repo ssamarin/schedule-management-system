@@ -108,7 +108,23 @@ function Table() {
     font-size: 16px;
     line-height: 150%;
     vertical-align: middle;
+    transition: 0.3s all;
     background-color: #fff;
+  }
+
+  .select:hover {
+    background-color: #2B2D35;
+    button {
+      color: #fff;
+    }
+  }
+
+  .information {
+    cursor: pointer;
+  }
+
+  .active {
+    border: 2px solid #F0303F;
   }
 
   .hidden {
@@ -139,6 +155,8 @@ function Table() {
 
   useEffect(() => {
     getCalendarData();
+    const multiple = document.querySelector('.select-multiple');
+    multiple.style.display = 'none';
   }, [currentMoth, currentCity]);
 
   useEffect(() => {
@@ -148,17 +166,17 @@ function Table() {
   const switchCellStyles = (value) => {
     switch (value) {
       case 'сб':
-        return 'wekend';
+        return 'information wekend';
       case 'вс':
-        return 'wekend';
+        return 'information wekend';
       case 'н':
-        return 'wekend';
+        return 'information wekend';
       case 'у':
-        return 'fired';
+        return 'information fired';
       case 'б':
-        return 'sick';
+        return 'information sick';
       case 'о':
-        return 'vacation';
+        return 'information vacation';
       default:
         return 'information';
     }
@@ -169,6 +187,30 @@ function Table() {
     selects[i].classList.toggle('hidden');
   };
 
+  let count = 0;
+  const toggleActive = (e) => {
+    const cels = [...document.querySelectorAll('.information')];
+    const multiple = document.querySelector('.select-multiple');
+    cels.forEach((cell) => {
+      if (cell === e.target && cell.getAttribute('data-active') === 'false') {
+        cell.setAttribute('data-active', 'true');
+        cell.classList.add('active');
+        count++;
+        console.log(count);
+      } else if (cell === e.target && cell.getAttribute('data-active') === 'true') {
+        cell.setAttribute('data-active', 'false');
+        cell.classList.remove('active');
+        count--;
+        console.log(count);
+      }
+      if (count === 0) {
+        multiple.style.display = 'none';
+      } else {
+        multiple.style.display = 'flex';
+      }
+    });
+  };
+
   const deleteEmployee = useCallback((id) => {
     request(request(`http://localhost:3001/${currentMoth + currentCity}`), 'DELETE')
       .then((data) => console.log(data, 'Deleted'))
@@ -176,29 +218,77 @@ function Table() {
       .catch((e) => console.error(e));
   });
 
+  const multipleValueChange = (e) => {
+    const attribure = e.target.getAttribute('data-select');
+    const cels = [...document.querySelectorAll('.information')];
+    const activeCels = cels.filter((item) => item.getAttribute('data-active') === 'true');
+    console.log(activeCels);
+    switch (attribure) {
+      case '1':
+        activeCels.forEach((item) => {
+          item.innerHTML = '1';
+          item.classList = switchCellStyles(attribure);
+        });
+        break;
+      case 'н':
+        activeCels.forEach((item) => {
+          item.innerHTML = 'н';
+          item.classList = switchCellStyles(attribure);
+        });
+        break;
+      case 'о':
+        activeCels.forEach((item) => {
+          item.innerHTML = 'о';
+          item.classList = switchCellStyles(attribure);
+        });
+        break;
+      case 'б':
+        activeCels.forEach((item) => {
+          item.innerHTML = 'б';
+          item.classList = switchCellStyles(attribure);
+        });
+        break;
+      case 'у':
+        activeCels.forEach((item) => {
+          item.innerHTML = 'у';
+          item.classList = switchCellStyles(attribure);
+        });
+        break;
+      default:
+        return undefined;
+    }
+    cels.forEach((item) => {
+      item.classList.remove('active');
+      item.setAttribute('data-active', 'false');
+    });
+    switchCellStyles(attribure);
+    return undefined;
+  };
+
   return (
-    <Wrapper>
-      <tbody>
-        <tr key={nanoid()} className="darkRow">
-          <td key={nanoid()} aria-label="first" className="firstColumn" />
+    <>
+      <Wrapper>
+        <tbody>
+          <tr key={nanoid()} className="darkRow">
+            <td key={nanoid()} aria-label="first" className="firstColumn" />
+            {
+              daysOfTheWeek.map((item) => (
+                <td
+                  key={nanoid()}
+                  className={switchCellStyles(item)}
+                >
+                  {item}
+                </td>
+              ))
+            }
+          </tr>
+          <tr key={nanoid()} className="darkRow">
+            <td key={nanoid()} className="firstColumn">Сотрудник</td>
+            {
+              daysOfTheWeek.map((item, i) => (<td key={nanoid()} className={item === 'сб' || item === 'вс' ? 'wekend information' : 'information'}>{i + 1}</td>))
+            }
+          </tr>
           {
-            daysOfTheWeek.map((item) => (
-              <td
-                key={nanoid()}
-                className={switchCellStyles(item)}
-              >
-                {item}
-              </td>
-            ))
-          }
-        </tr>
-        <tr key={nanoid()} className="darkRow">
-          <td key={nanoid()} className="firstColumn">Сотрудник</td>
-          {
-            daysOfTheWeek.map((item, i) => (<td key={nanoid()} className={item === 'сб' || item === 'вс' ? 'wekend information' : 'information'}>{i + 1}</td>))
-          }
-        </tr>
-        {
             employees.map((item, i) => (
               <tr key={nanoid()}>
                 <td key={nanoid()} className="firstColumn">
@@ -223,14 +313,32 @@ function Table() {
                 </td>
                 {
                   item.schedule.map((elem) => (
-                    <td className={switchCellStyles(elem)} key={nanoid()}>{elem}</td>))
+                    <td className={switchCellStyles(elem)} onClick={(e) => toggleActive(e)} data-active="false" key={nanoid()}>{elem}</td>))
                 }
               </tr>
             ))
           }
-        <AddForm />
-      </tbody>
-    </Wrapper>
+          <AddForm />
+        </tbody>
+      </Wrapper>
+      <div className="select-multiple">
+        <button type="button" onClick={(e) => multipleValueChange(e)} data-select="1" className="selectItem">
+          Рабочий день
+        </button>
+        <button type="button" onClick={(e) => multipleValueChange(e)} data-select="н" className="selectItem">
+          Выходной
+        </button>
+        <button type="button" onClick={(e) => multipleValueChange(e)} data-select="о" className="selectItem">
+          Отпуск
+        </button>
+        <button type="button" onClick={(e) => multipleValueChange(e)} data-select="б" className="selectItem">
+          Больничный
+        </button>
+        <button type="button" onClick={(e) => multipleValueChange(e)} data-select="у" className="selectItem">
+          Увольнение
+        </button>
+      </div>
+    </>
   );
 }
 
