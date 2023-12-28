@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import logo from '../../assets/icons/menu/logo.svg';
@@ -22,6 +23,7 @@ function Menu() {
     justify-content: space-between;
     height: 100%;
     text-align: center;
+    box-shadow: 0px 2px 2px 0px rgba(34, 62, 78, 0.15);
     background-color: #fff;
 
     .logo {
@@ -30,8 +32,10 @@ function Menu() {
     }
 
     .list-item {
+      display: list-item;
       width: 60px;
       height: 40px;
+      padding: 8px;
       margin-bottom: 4px;
     }
 
@@ -40,59 +44,68 @@ function Menu() {
       height: 40px;
       padding: 8px;
     }
+
+    .active {
+      border-left: 4px solid #F0303F;
+      background: #F4F6F9;
+    }
   `;
 
   return (
     <Bar>
       <div className="menu">
-        <div className="logo">
-          <img src={logo} alt="logo" />
-        </div>
+        <NavLink to="/" end>
+          <div className="logo">
+            <img src={logo} alt="logo" />
+          </div>
+        </NavLink>
         <ul className="list">
-          <li className="list-item">
+          <NavLink to="/" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={calendar} alt="schedule" />
             </div>
-          </li>
-          <li className="list-item">
+          </NavLink>
+          <NavLink to="/emptyBook" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={book} alt="book" />
             </div>
-          </li>
-          <li className="list-item">
+          </NavLink>
+          <NavLink to="/emptyDrive" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={user} alt="user" />
             </div>
-          </li>
-          <li className="list-item">
+          </NavLink>
+          <NavLink to="/emptyCar" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={car} alt="car" />
             </div>
-          </li>
-          <li className="list-item">
+          </NavLink>
+          <NavLink to="/emptyAdmin" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={admin} alt="admin" />
             </div>
-          </li>
-          <li className="list-item">
+          </NavLink>
+          <NavLink to="/emptyBriefcas" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={briefcase} alt="briefcase" />
             </div>
-          </li>
-          <li className="list-item">
+          </NavLink>
+          <NavLink to="/emptyMsg" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={msg} alt="messanger" />
             </div>
-          </li>
-          <li className="list-item">
+          </NavLink>
+          <NavLink to="/emptyDanger" className={({ isActive }) => isActive ? 'list-item active' : 'list-item'}>
             <div>
               <img src={danger} alt="danger" />
             </div>
-          </li>
+          </NavLink>
         </ul>
       </div>
       <div className="back">
-        <img src={back} alt="back" />
+        <NavLink to="/">
+          <img src={back} alt="back" />
+        </NavLink>
       </div>
     </Bar>
   );

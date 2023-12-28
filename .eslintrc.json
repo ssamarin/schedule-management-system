@@ -11,6 +11,8 @@
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "no-param-reassign": "off",
-        "no-plusplus": "off"
+        "no-plusplus": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-confusing-arrow": "off"
     }
 }

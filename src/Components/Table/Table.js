@@ -222,6 +222,7 @@ function Table() {
     const attribure = e.target.getAttribute('data-select');
     const cels = [...document.querySelectorAll('.information')];
     const activeCels = cels.filter((item) => item.getAttribute('data-active') === 'true');
+    const multiple = document.querySelector('.select-multiple');
     console.log(activeCels);
     switch (attribure) {
       case '1':
@@ -262,6 +263,7 @@ function Table() {
       item.setAttribute('data-active', 'false');
     });
     switchCellStyles(attribure);
+    multiple.style.display = 'none';
     return undefined;
   };
 
