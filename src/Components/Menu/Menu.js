@@ -54,7 +54,7 @@ function Menu() {
   return (
     <Bar>
       <div className="menu">
-        <NavLink to="/" end>
+        <NavLink className={({ isActive }) => isActive ? '' : ''} to="/" end>
           <div className="logo">
             <img src={logo} alt="logo" />
           </div>
@@ -103,7 +103,7 @@ function Menu() {
         </ul>
       </div>
       <div className="back">
-        <NavLink to="/">
+        <NavLink className={({ isActive }) => isActive ? '' : ''} to="/">
           <img src={back} alt="back" />
         </NavLink>
       </div>
