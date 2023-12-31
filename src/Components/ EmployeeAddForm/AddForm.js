@@ -47,7 +47,7 @@ const Wrapper = styled.tr`
 }
 
 .danger {
-  background-color: #F0303F;
+  background-color: #FEEAEC;
 }
 `;
 
@@ -112,11 +112,18 @@ function AddForm() {
         </div>
       </td>
       {
-        countOfTheDays.map(() => (
-          <td aria-label="schedule input">
-            <input onChange={() => getSheduleData()} className="dayDescr" type="text" />
-          </td>
-        ))
+        countOfTheDays.map((item, i) => {
+          const wekends = [6, 7, 13, 14, 20, 21, 27, 28];
+          let index = false;
+          if (wekends.indexOf((i + 1)) > -1) {
+            index = true;
+          }
+          return (
+            <td aria-label="schedule input" className={index ? 'danger' : ''}>
+              <input onChange={() => getSheduleData()} className={index ? 'dayDescr danger' : 'dayDescr'} type="text" />
+            </td>
+          );
+        })
       }
     </Wrapper>
   );
