@@ -138,6 +138,7 @@ function Table() {
   const currentCity = useSelector((state) => state.table.currentCity);
   const daysOfTheWeek = useSelector((state) => state.table.daysOfTheWeek);
   const employees = useSelector((state) => state.table.employees);
+  const searchData = useSelector((state) => state.filters.searchData);
 
   const getCalendarData = useCallback(() => {
     dispatch(daysOfTheWeekFetching());
@@ -196,12 +197,10 @@ function Table() {
         cell.setAttribute('data-active', 'true');
         cell.classList.add('active');
         count++;
-        console.log(count);
       } else if (cell === e.target && cell.getAttribute('data-active') === 'true') {
         cell.setAttribute('data-active', 'false');
         cell.classList.remove('active');
         count--;
-        console.log(count);
       }
       if (count === 0) {
         multiple.style.display = 'none';
@@ -223,7 +222,6 @@ function Table() {
     const cels = [...document.querySelectorAll('.information')];
     const activeCels = cels.filter((item) => item.getAttribute('data-active') === 'true');
     const multiple = document.querySelector('.select-multiple');
-    console.log(activeCels);
     switch (attribure) {
       case '1':
         activeCels.forEach((item) => {
@@ -267,6 +265,16 @@ function Table() {
     return undefined;
   };
 
+  const filterEmployees = (search) => {
+    if (search.length === 0) {
+      return employees;
+    }
+    const filteredEmployees = employees.filter((item) => item.name.indexOf(search) > -1);
+    return filteredEmployees;
+  };
+
+  const visibleEmployees = filterEmployees(searchData);
+
   return (
     <>
       <Wrapper>
@@ -291,7 +299,7 @@ function Table() {
             }
           </tr>
           {
-            employees.map((item, i) => (
+            visibleEmployees.map((item, i) => (
               <tr key={nanoid()}>
                 <td key={nanoid()} className="firstColumn">
                   <div className="nameWrapper">
